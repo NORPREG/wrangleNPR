@@ -1,3 +1,16 @@
+import pydicom as pd
+import highdicom as hd
+import numpy as np
+
+from pprint import pprint
+
+from pydicom.filereader import dcmread
+from pydicom.sr.codedict import codes
+from pydicom.uid import generate_uid
+
+from highdicom.sr.content import FindingSite
+from highdicom.sr.templates import Measurement, TrackingIdentifier
+
 import xml.dom.minidom
 from pprint import pprint
 import pathlib
@@ -29,22 +42,6 @@ def is_float(string):
         return False
 
 
-"""
-MODEL:
-<?xml version="1.0" encoding="UTF-8"?>
-<CATALOG>
-  <PLANT>
-    <COMMON>Bloodroot</COMMON>
-    <BOTANICAL>Sanguinaria canadensis</BOTANICAL>
-    <ZONE>4</ZONE>
-    <LIGHT>Mostly Shady</LIGHT>
-    <PRICE>$2.44</PRICE>
-    <AVAILABILITY>031599</AVAILABILITY>
-  </PLANT>
-</CATALOG>
-"""
-
-
 class PLANT(BaseXmlModel):
     """ Base XML Model for the inner <PLANT/> element. """
 
@@ -73,7 +70,8 @@ class CATALOG(BaseXmlModel):
     PLANT: List[PLANT]
 
 
-xml_doc = pathlib.Path("../Data/XML/plant_catalog.xml").read_text().encode("utf-8")
+sr = pd.dcmread("../Data/DICOM/sr_withXML.dcm")
+xml_doc = sr.ContentSequence[0].TextValue.encode("utf-8")
 
 catalog = CATALOG.from_xml(xml_doc)
 print(catalog)
