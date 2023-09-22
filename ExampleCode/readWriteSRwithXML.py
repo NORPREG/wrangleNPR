@@ -15,7 +15,7 @@ from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
 
 
-def is_float(string) -> bool:
+def is_float(string: str) -> bool:
     try:
         float(string)
         return True
@@ -24,14 +24,14 @@ def is_float(string) -> bool:
 
 
 class MissingDollarSignException(Exception):
-    def __init__(self, value, message="Missing dollar sign in price element"):
+    def __init__(self, value: str, message: str ="Missing dollar sign in price element"):
         self.value = value
         self.message = message
         super().__init__(self.message)
 
 
 class PriceIsNotFloatException(Exception):
-    def __init__(self, value, message="Cannot parse price"):
+    def __init__(self, value: str, message: str ="Cannot parse price"):
         self.value = value
         self.message = message
         super().__init__(self.message)
