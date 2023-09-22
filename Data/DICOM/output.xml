@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report type="Basic Text SR">
+<sopclass uid="1.2.840.10008.5.1.4.1.1.88.11">BasicTextSRStorage</sopclass>
+<modality>SR</modality>
+<patient>hmmm</patient>
+<study uid="2.25.269604219559051618068575018722882946750">
+</study>
+<series uid="2.25.95518208276815952483326801365982180822">
+<number>1</number>
+</series>
+<instance uid="2.25.81379255642100713301038993702166632803">
+<number>1</number>
+</instance>
+<document>
+<completion flag="PARTIAL">
+</completion>
+<verification flag="UNVERIFIED">
+</verification>
+<content>
+<container flag="SEPARATE">
+<concept>
+<value>121144</value>
+<scheme>
+<designator>DCM</designator>
+</scheme>
+<meaning>Document Title</meaning>
+</concept>
+<text>
+<relationship>CONTAINS</relationship>
+<concept>
+<value>111412</value>
+<scheme>
+<designator>DCM</designator>
+</scheme>
+<meaning>Narrative Summary</meaning>
+</concept>
+<value>Hello World!!</value>
+</text>
+</container>
+</content>
+</document>
+</report>

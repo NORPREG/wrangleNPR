@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report type="Basic Text SR">
+<sopclass uid="1.2.840.10008.5.1.4.1.1.88.11">BasicTextSRStorage</sopclass>
+<modality>SR</modality>
+<patient>
+</patient>
+<study uid="2.25.269604219559051618068575018722882946750">
+</study>
+<series uid="2.25.95518208276815952483326801365982180822">
+<number>1</number>
+</series>
+<instance uid="2.25.81379255642100713301038993702166632803">
+<number>1</number>
+</instance>
+<document>
+<completion flag="PARTIAL">
+</completion>
+<verification flag="UNVERIFIED">
+</verification>
+<content>
+<container flag="SEPARATE">
+<concept>
+<value>121144</value>
+<scheme>
+<designator>DCM</designator>
+</scheme>
+<meaning>Document Title</meaning>
+</concept>
+<text>
+<relationship>CONTAINS</relationship>
+<concept>
+<value>111412</value>
+<scheme>
+<designator>DCM</designator>
+</scheme>
+<meaning>Narrative Summary</meaning>
+</concept>
+<value>&lt;data-set&gt;
+&lt;CATALOG&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Empire Burlesque&lt;/TITLE&gt;
+&lt;ARTIST&gt;Bob Dylan&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Columbia&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1985&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Hide your heart&lt;/TITLE&gt;
+&lt;ARTIST&gt;Bonnie Tyler&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;CBS Records&lt;/COMPANY&gt;
+&lt;PRICE&gt;9.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1988&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Greatest Hits&lt;/TITLE&gt;
+&lt;ARTIST&gt;Dolly Parton&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;RCA&lt;/COMPANY&gt;
+&lt;PRICE&gt;9.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1982&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Still got the blues&lt;/TITLE&gt;
+&lt;ARTIST&gt;Gary Moore&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Virgin records&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.20&lt;/PRICE&gt;
+&lt;YEAR&gt;1990&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Eros&lt;/TITLE&gt;
+&lt;ARTIST&gt;Eros Ramazzotti&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;EU&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;BMG&lt;/COMPANY&gt;
+&lt;PRICE&gt;9.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1997&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;One night only&lt;/TITLE&gt;
+&lt;ARTIST&gt;Bee Gees&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Polydor&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1998&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Sylvias Mother&lt;/TITLE&gt;
+&lt;ARTIST&gt;Dr.Hook&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;CBS&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.10&lt;/PRICE&gt;
+&lt;YEAR&gt;1973&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Maggie May&lt;/TITLE&gt;
+&lt;ARTIST&gt;Rod Stewart&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Pickwick&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.50&lt;/PRICE&gt;
+&lt;YEAR&gt;1990&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Romanza&lt;/TITLE&gt;
+&lt;ARTIST&gt;Andrea Bocelli&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;EU&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Polydor&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.80&lt;/PRICE&gt;
+&lt;YEAR&gt;1996&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;When a man loves a woman&lt;/TITLE&gt;
+&lt;ARTIST&gt;Percy Sledge&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Atlantic&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.70&lt;/PRICE&gt;
+&lt;YEAR&gt;1987&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Black angel&lt;/TITLE&gt;
+&lt;ARTIST&gt;Savage Rose&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;EU&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Mega&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1995&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;1999 Grammy Nominees&lt;/TITLE&gt;
+&lt;ARTIST&gt;Many&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Grammy&lt;/COMPANY&gt;
+&lt;PRICE&gt;10.20&lt;/PRICE&gt;
+&lt;YEAR&gt;1999&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;For the good times&lt;/TITLE&gt;
+&lt;ARTIST&gt;Kenny Rogers&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Mucik Master&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.70&lt;/PRICE&gt;
+&lt;YEAR&gt;1995&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Big Willie style&lt;/TITLE&gt;
+&lt;ARTIST&gt;Will Smith&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Columbia&lt;/COMPANY&gt;
+&lt;PRICE&gt;9.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1997&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Tupelo Honey&lt;/TITLE&gt;
+&lt;ARTIST&gt;Van Morrison&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Polydor&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.20&lt;/PRICE&gt;
+&lt;YEAR&gt;1971&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Soulsville&lt;/TITLE&gt;
+&lt;ARTIST&gt;Jorn Hoel&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;Norway&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;WEA&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1996&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;The very best of&lt;/TITLE&gt;
+&lt;ARTIST&gt;Cat Stevens&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Island&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1990&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Stop&lt;/TITLE&gt;
+&lt;ARTIST&gt;Sam Brown&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;A and M&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1988&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Bridge of Spies&lt;/TITLE&gt;
+&lt;ARTIST&gt;T&apos;Pau&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Siren&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1987&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Private Dancer&lt;/TITLE&gt;
+&lt;ARTIST&gt;Tina Turner&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Capitol&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1983&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Midt om natten&lt;/TITLE&gt;
+&lt;ARTIST&gt;Kim Larsen&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;EU&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Medley&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.80&lt;/PRICE&gt;
+&lt;YEAR&gt;1983&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Pavarotti Gala Concert&lt;/TITLE&gt;
+&lt;ARTIST&gt;Luciano Pavarotti&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;DECCA&lt;/COMPANY&gt;
+&lt;PRICE&gt;9.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1991&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;The dock of the bay&lt;/TITLE&gt;
+&lt;ARTIST&gt;Otis Redding&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Stax Records&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.90&lt;/PRICE&gt;
+&lt;YEAR&gt;1968&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Picture book&lt;/TITLE&gt;
+&lt;ARTIST&gt;Simply Red&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;EU&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;Elektra&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.20&lt;/PRICE&gt;
+&lt;YEAR&gt;1985&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Red&lt;/TITLE&gt;
+&lt;ARTIST&gt;The Communards&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;UK&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;London&lt;/COMPANY&gt;
+&lt;PRICE&gt;7.80&lt;/PRICE&gt;
+&lt;YEAR&gt;1987&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;CD&gt;
+&lt;TITLE&gt;Unchain my heart&lt;/TITLE&gt;
+&lt;ARTIST&gt;Joe Cocker&lt;/ARTIST&gt;
+&lt;COUNTRY&gt;USA&lt;/COUNTRY&gt;
+&lt;COMPANY&gt;EMI&lt;/COMPANY&gt;
+&lt;PRICE&gt;8.20&lt;/PRICE&gt;
+&lt;YEAR&gt;1987&lt;/YEAR&gt;
+&lt;/CD&gt;
+&lt;/CATALOG&gt;
+&lt;/data-set&gt;</value>
+</text>
+</container>
+</content>
+</document>
+</report>
