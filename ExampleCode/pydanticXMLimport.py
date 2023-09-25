@@ -77,3 +77,5 @@ xml_doc = pathlib.Path("../Data/XML/plant_catalog.xml").read_text().encode("utf-
 
 catalog = CATALOG.from_xml(xml_doc)
 print(catalog)
+
+

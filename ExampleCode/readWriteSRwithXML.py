@@ -93,6 +93,10 @@ def read():
     print(sr)
 
 
-if __name__ == "__main__":
+def main():
     write()
     read()
+
+
+if __name__ == "__main__":
+    main()
