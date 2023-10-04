@@ -1,0 +1,8 @@
+pydantic
+pydantic_xml
+hypothesis
+pydicom
+typing
+tempfile
+datetime
+

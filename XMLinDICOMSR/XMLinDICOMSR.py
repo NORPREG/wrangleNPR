@@ -1,25 +1,12 @@
 import pydicom
-
-from pprint import pprint
-import tempfile
-
-import datetime
-
 from pydicom.filereader import dcmread
-from pydicom.sr.codedict import codes
 from pydicom.uid import generate_uid, UID
 
-from pprint import pprint
-import zlib
-import base64
-
-from hypothesis import given
-from hypothesis.strategies import text
-
+import tempfile
+import datetime
 import pydantic
 from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
-
 
 class BasicSR:
     explicitVR = UID("1.2.840.10008.1.2.1")
@@ -28,9 +15,11 @@ class BasicSR:
     documentTitleCode = "121144"
     externalDataSourceCode = "111781"
 
-    def __init__(self):
-        self.ds = None
-        self.setup()
+    def __init__(self, ds: pydicom.Dataset = None) -> None:
+        self.ds = ds
+
+        if not self.ds:
+            self.setup()
 
     def setup(self) -> None:
         suffix = ".dcm"
@@ -89,38 +78,22 @@ class BasicSR:
         self.ds.ContentSequence = pydicom.sequence.Sequence()
         self.ds.ContentSequence.append(report)
 
-    def saveFile(self, filename: str) -> None:
+    def saveSR(self, filename: str) -> None:
         self.ds.save_as(filename, write_like_original=False)
 
+    def getXML(self) -> str:
+        return self.ds.ContentSequence[0].TextValue
 
-def makeFile(XMLString: str, filename: str) -> BasicSR:
-    parentUID = UID("1.2.3.4.5.6.7")
-    basicSR = BasicSR()
-    basicSR.addUIDs(parentUID)
-    basicSR.addPatient(patientID="12345678", patientName="Test^Firstname")
-    basicSR.addContent(XMLString)
-    basicSR.saveFile(filename)
-    return basicSR
+    def saveXML(filename: str) -> None:
+        XMLString = self.getXML()
+        with open(filename, "w") as fout:
+            fout.write(XMLString)
 
-
-def loadFile(filename: str) -> pydicom.Dataset:
+def loadSR(filename: str) -> BasicSR:
     ds = dcmread(filename)
-    return ds
-
-
-def getXML(ds: pydicom.Dataset) -> str:
-    XML = ds.ContentSequence[0].TextValue
-    return XML
-
+    return BasicSR(ds)
 
 XML = "".join(open("../Data/XML/uwm.xml").readlines())
-
 basicSR = makeFile(XML, "sr.dcm")
-ds = loadFile("sr.dcm")
-outXML = getXML(ds)
-
-@given(text(min_size=5))
-def test_store_load(s):
-    makeFile(s, "sr.dcm")
-    output = loadFile("sr.dcm").ContentSequence[0].TextValue
-    assert s == output
+outputBasicSR = loadSR("sr.dcm")
+outXML = outputBasicSR.getXML()
