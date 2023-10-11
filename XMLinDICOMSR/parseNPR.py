@@ -39,6 +39,16 @@ class NPRDocument:
 
 				return medisinskStraling
 
+	def getBehandlingsSerie(self, pasientNr: int) -> list:
+		for obj in self.inst.Objektholder:
+			if not obj.pasientNr == pasientNr:
+				continue
+
+			if len(obj.medisinskStraling) > 1:
+				raise ListStructureAssertionException('medisinskStraling encountered more than one')
+			
+			return obj.medisinskStraling[0].behandlingsserie
+
 	def getReferencedVolumes(self, pasientNr: int) -> list:
 		# TODO: Sjekk at pasientNr == attr i medisinsk stråling her i stedet for å bruke indeksert patID
 
@@ -63,17 +73,12 @@ class NPRDocument:
 		for structureName in structureDict.values():
 			doseDict[structureName] = {'plan': list(), 'gitt': list()}
 
-		for objekt in self.inst.Objektholder:
-			if not objekt.pasientNr == pasientNr:
-				continue
-
-			for medisinskStraling in objekt.medisinskStraling:
-				for behandlingsserie in medisinskStraling.behandlingsserie:
-					for apparatFremmote in behandlingsserie.ApparatFremmote:
-						for doseBidrag in apparatFremmote.doseBidrag:
-							structureName = structureDict[doseBidrag.referansevolumID]
-							doseDict[structureName]['plan'].append(float(doseBidrag.planDose))
-							doseDict[structureName]['gitt'].append(float(doseBidrag.gittDose))
+		for behandlingsserie in self.getBehandlingsSerie(pasientNr):
+			for apparatFremmote in behandlingsserie.ApparatFremmote:
+				for doseBidrag in apparatFremmote.doseBidrag:
+					structureName = structureDict[doseBidrag.referansevolumID]
+					doseDict[structureName]['plan'].append(float(doseBidrag.planDose))
+					doseDict[structureName]['gitt'].append(float(doseBidrag.gittDose))
 
 		return doseDict
 
@@ -85,6 +90,16 @@ class NPRDocument:
 			data['plan'] = np.sum(data['plan'])
 
 		return doseFractions
+
+	def getBehandlingsSerieNavn(self, pasientNr: int) -> set:
+		"""Løpenummer som beskriver antall slike behandlinger pasienter har fått + serienavn."""
+
+		serier = set()
+
+		for behandlingsserie	in self.getBehandlingsSerie(pasientNr):
+			serier.add(behandlingsserie.behandlingsserieNavn)
+
+		return serier
 
 	def getEpisodes(self, pasientNr: int) -> list:
 		# episode id: diagnosis, treatment code
@@ -109,8 +124,33 @@ class NPRDocument:
 
 		return {diag: self.ICD10.getICD10Definition(diag) for diag in diagnoser}
 
-	def getProsedyrer(self, pasientNr: int) -> str:
-		pass
+	def getProsedyrer(self, pasientNr: int) -> dict:
+		prosedyrer = set()
+
+		episodes = self.getEpisodes(pasientNr)
+		for episode in episodes:
+			for tjeneste in episode.tjeneste:
+				for tiltak in tjeneste.tiltak:
+					for prosedyre in tiltak.prosedyre:
+						for kode in prosedyre.kode:
+							prosedyrer.add(kode.kodeVerdi)
+		
+		return {pros: self.NKPK.getNKPKDefinition(pros) for pros in prosedyrer}
 
 NPR = NPRDocument("../Data/XML/NPR-TstHelge5.xml")
-print(NPR.getDiagnosis())
+
+print("PATIENTS")
+print(NPR.getPatients())
+
+print("\nTOTAL DOSE")
+print(NPR.getDoseTotal(3198))
+
+print("\nDIAGNOSIS")
+print(NPR.getDiagnosis(3198))
+
+print("\nPROCEDURES")
+print(NPR.getProsedyrer(3198))
+
+print("\nTREATMENT SERIES NAME")
+print(NPR.getBehandlingsSerieNavn(4724))
+

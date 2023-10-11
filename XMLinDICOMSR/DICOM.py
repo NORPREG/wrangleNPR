@@ -20,7 +20,8 @@ import pydantic
 from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
 
-class DICOMInterface:
+
+class BasicSR:
     explicitVR = UID("1.2.840.10008.1.2.1")
     basicTextSRStorage = UID("1.2.840.10008.5.1.4.1.1.88.11")
     pythonClassUID = UID("1.2.826.0.1.3680043.8.498.1")
@@ -91,17 +92,35 @@ class DICOMInterface:
     def saveFile(self, filename: str) -> None:
         self.ds.save_as(filename, write_like_original=False)
 
-    def makeDataset(self, patientName: str, parentUID: str, patientID: str, patientName: str, XMLString: str) -> FileDataset
-    		basicSR = BasicSR()
-		  	basicSR.addUIDs(parentUID)
-	    	basicSR.addPatient(patientID="12345678", patientName="Test^Firstname")
-	    	basicSR.addContent(XMLString)
-	    	return basicSR
 
-class REDCapInterface:
-	"""Use PyCap to send dictionary of parameters"""
-	pass
+def makeFile(XMLString: str, filename: str) -> BasicSR:
+    parentUID = UID("1.2.3.4.5.6.7")
+    basicSR = BasicSR()
+    basicSR.addUIDs(parentUID)
+    basicSR.addPatient(patientID="12345678", patientName="Test^Firstname")
+    basicSR.addContent(XMLString)
+    basicSR.saveFile(filename)
+    return basicSR
 
-class XMLInterface:
-	""" Use data object to send dictionary of parameters"""
-	pass
+
+def loadFile(filename: str) -> pydicom.Dataset:
+    ds = dcmread(filename)
+    return ds
+
+
+def getXML(ds: pydicom.Dataset) -> str:
+    XML = ds.ContentSequence[0].TextValue
+    return XML
+
+
+XML = "".join(open("../Data/XML/uwm.xml").readlines())
+
+basicSR = makeFile(XML, "sr.dcm")
+ds = loadFile("sr.dcm")
+outXML = getXML(ds)
+
+@given(text(min_size=5))
+def test_store_load(s):
+    makeFile(s, "sr.dcm")
+    output = loadFile("sr.dcm").ContentSequence[0].TextValue
+    assert s == output

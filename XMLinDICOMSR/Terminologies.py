@@ -7,7 +7,7 @@ class NKPK:
 		with open("../Data/Terminologies/prosedyrekoder.csv", "r") as csv:
 			for line in csv.readlines():
 				lineparsed = line.split(";")
-				self.NKPK[lineparsed[0]] = lineparsed[1]
+				self.NKPK[lineparsed[0]] = lineparsed[1].replace("\n","")
 
 	def getNKPKDefinition(self, code: str) -> str:
 		if not code in self.NKPK:
