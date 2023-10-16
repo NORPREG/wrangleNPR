@@ -1,0 +1,5 @@
+/Terminologies/__pycache__/*.pyc
+/Data/XML/NPR-TstHelge.xml
+/Data/XML/NPR-TstHelge5.xml
+/Data/XML/NPR-TstHelge_Simple.xml
+*.pyc
