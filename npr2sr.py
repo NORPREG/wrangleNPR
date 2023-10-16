@@ -1,15 +1,8 @@
-from Terminologies import ICD10, NKPK, NPR, Region
 from Interfaces import NPRInterface
 from Interfaces import DICOMInterface, makeDataset
-from pydicom.uid import generate_uid, UID
+from Interfaces import ConquestInterface
 
-import pathlib
-from pprint import pprint
-import xml.dom.minidom
-import numpy as np
-
-import tempfile
-
+from pydicom import generate_uid
 import argparse
 
 
@@ -23,7 +16,6 @@ class NPRVersionNotSupportedException(Exception):
 # npr2sr
 
 parser = argparse.ArgumentParser(description="NPR-XML to DICOM SR encapsulation program")
-
 parser.add_argument("inputFile", type=str, help="Input NPR XML file")
 parser.add_argument("-o", "--outputFile", type=str, help="Output DICOM SR file name")
 parser.add_argument("-c", "--outputConquest", action="store_true", help="Send directly to Conquest")
