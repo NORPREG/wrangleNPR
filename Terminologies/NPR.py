@@ -2,7 +2,7 @@ import pydantic
 from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
 from datetime import datetime, date
-
+from polyfactory.factories.pydantic_factory import ModelFactory
 
 class TypeId(BaseXmlModel, nsmap={'': 'http://www.kith.no/xmlstds/msghead/2006-05-24'}):
 	V: str = attr()
@@ -440,7 +440,8 @@ class Objektholder(BaseXmlModel, nsmap={'': 'http://www.npr.no/xmlstds/57_0_1_st
 	pasientNr: int = attr() #  brukes i forbindelse med tilbakemelding av feil, og kobling av personidentifikasjon i Ident-meldingen (ide) til andre meldinger.
 	pasientGUID: Optional[int] = attr(default=None)
 
-	Pasient: Optional[Pasient]
+	Pasient: Pasient
+	# Pasient: Optional[Pasient]
 	episode: List[Episode] = element(tag="Episode", default_factory=list)
 	medisinskStraling: Optional[List[MedisinskStraling]] = element(tag="MedisinskStraling", default_factory=list)
 
@@ -518,4 +519,8 @@ class MsgHead(BaseXmlModel, nsmap={'': 'http://www.kith.no/xmlstds/msghead/2006-
 # Kan man ha flere medisinsk stråling per objektholder?
 # Er medisinskStralingID samme som pasientID?
 
-# Er også en ident XML for å koble person ID mot personnr
+class MsgHeadFactory(ModelFactory[MsgHead]):
+	__model__ = MsgHead
+	__allow_none_optionals__ = False
+	__min_collection_length__ = 1
+	__max_collection_length__ = 1

@@ -3,28 +3,33 @@ from pydicom.dataset import Dataset
 from glob import glob
 from pynetdicom import AE, debug_logger
 from pynetdicom.sop_class import (
-    PatientRootQueryRetrieveInformationModelMove,
-    CTImageStorage,
-    RTDoseStorage,
-    RTPlanStorage,
-    RTStructureSetStorage,
-    RTIonPlanStorage,
-    BasicTextSRStorage
+	 PatientRootQueryRetrieveInformationModelMove,
+	 CTImageStorage,
+	 RTDoseStorage,
+	 RTPlanStorage,
+	 RTStructureSetStorage,
+	 RTIonPlanStorage,
+	 BasicTextSRStorage
 )
 
 from config import config
 
+
 class ConfigNotFoundException(Exception):
 	pass
+
 
 class NoDICOMAssociation(Exception):
 	pass
 
+
 class ConquestInterface:
-   """ Use data object to send dictionary of parameters"""
-   def __init__(self):
-   	if not all([k in config for k in ['conquestAE', 'conquestIP', 'conquestPort']]):
-			raise ConfigNotFoundException("Please enter 'conquestAE', 'conquestIP' and 'conquestPort' in config.py.")
+	""" Use data object to send dictionary of parameters"""
+
+	def __init__(self):
+		if not all([k in config for k in ['conquestAE', 'conquestIP', 'conquestPort']]):
+			raise ConfigNotFoundException(
+				 "Please enter 'conquestAE', 'conquestIP' and 'conquestPort' in config.py.")
 
 		# Initialise the Application Entity
 		self.ae = AE()
@@ -43,9 +48,9 @@ class ConquestInterface:
 		if not self.assoc.is_established:
 			raise NoDICOMAssociation('Association rejected, aborted or never connected')
 
-	    response = self.assoc.send_c_store(ds)
-	    self.assoc.release()
-	    return response
+		response = self.assoc.send_c_store(ds)
+		self.assoc.release()
+		return response
 
 	def sendFilePath(self, filePath: str) -> list:
 		files = glob(filePath)
@@ -55,10 +60,10 @@ class ConquestInterface:
 		if not self.assoc.is_established:
 			raise NoDICOMAssociation('Association rejected, aborted or never connected')
 
-	    for file in files:
-	        ds = pydicom.dcmread(file)        
-	        response = self.assoc.send_c_store(ds)
-	        responses.append(response)
-	    self.assoc.release()
-	    
-	    return responses
+		for file in files:
+			ds = pydicom.dcmread(file)
+			response = self.assoc.send_c_store(ds)
+			responses.append(response)
+		self.assoc.release()
+
+		return responses

@@ -93,9 +93,9 @@ class DICOMInterface:
       self.ds.save_as(filename, write_like_original=False)
 
 
-def makeDataset(self, parentUID: str, patientID: str, patientName: str, XMLString: str) -> DICOMInterface:
+def makeDataset(parentUID: str, patientID: str, patientName: str, XMLString: str) -> DICOMInterface:
    basicSR = DICOMInterface()
    basicSR.addUIDs(parentUID)
-   basicSR.addPatient(patientID="12345678", patientName="Test^Firstname")
+   basicSR.addPatient(patientID=patientID, patientName=patientName)
    basicSR.addContent(XMLString)
    return basicSR

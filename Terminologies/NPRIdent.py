@@ -3,6 +3,8 @@ from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
 from datetime import datetime, date
 
+from polyfactory.factories.pydantic_factory import ModelFactory
+
 
 class TypeId(BaseXmlModel, nsmap={'': 'http://www.kith.no/xmlstds/msghead/2006-05-24'}):
 	V: str = attr()
@@ -77,7 +79,7 @@ class Institusjon(BaseXmlModel, nsmap={'': 'http://www.npr.no/xmlstds/57_0_1_ide
 	institusjonID: int = attr()
 	foretak: Optional[str] = attr(default=None)
 
-	PasientIdent = List[PasientIdent]
+	PasientIdent: List[PasientIdent]
 
 class Melding(BaseXmlModel, nsmap={'': 'http://www.npr.no/xmlstds/57_0_1_ide'}):
 	"""Opplysninger som leverandører av helsetjenester i kommuner, 
@@ -139,3 +141,9 @@ class MsgHead(BaseXmlModel, nsmap={'': 'http://www.kith.no/xmlstds/msghead/2006-
 # Er medisinskStralingID samme som pasientID?
 
 # Er også en ident XML for å koble person ID mot personnr
+
+class MsgHeadFactory(ModelFactory[MsgHead]):
+	__model__ = MsgHead
+	__allow_none_optionals__ = False
+	__min_collection_length__ = 1
+	__max_collection_length__ = 1
