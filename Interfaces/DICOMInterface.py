@@ -1,9 +1,9 @@
-import pydicom
-
 from pprint import pprint
 import tempfile
 
 import datetime
+
+import pydicom
 
 from pydicom.filereader import dcmread
 from pydicom.sr.codedict import codes
@@ -32,23 +32,23 @@ class DICOMInterface:
       self.ds = None
       self.setup()
 
-   def setup(self) -> None:
-      suffix = ".dcm"
-      filename_little_endian = tempfile.NamedTemporaryFile(suffix=suffix).name
+   def setup(self, filename: str = None) -> None:
 
-      file_meta = pydicom.dataset.FileMetaDataset()
-      file_meta.TransferSyntaxUID = self.explicitVR
-      file_meta.ImplementationClassUID = self.pythonClassUID
-      file_meta.ImplementationVersionName = "Pydicom v" + pydicom.__version__
+      if not ds:
+         suffix = ".dcm"
+         filename_little_endian = tempfile.NamedTemporaryFile(suffix=suffix).name
 
-      self.ds = pydicom.FileDataset(filename_little_endian, {}, file_meta=file_meta, preamble=b"\0" * 128)
-      self.ds.is_little_endian = True
-      self.ds.is_implicit_VR = False
+         file_meta = pydicom.dataset.FileMetaDataset()
+         file_meta.TransferSyntaxUID = self.explicitVR
+         file_meta.ImplementationClassUID = self.pythonClassUID
+         file_meta.ImplementationVersionName = "Pydicom v" + pydicom.__version__
 
-      dt = datetime.datetime.now()
-      self.ds.ContentDate = dt.strftime("%Y%m%d")
-      timeStr = dt.strftime("%H%M%S.%f")  # Long format with micro seconds
-      self.ds.ContentTime = timeStr
+         self.ds = pydicom.FileDataset(filename_little_endian, {}, file_meta=file_meta, preamble=b"\0" * 128)
+         self.ds.is_little_endian = True
+         self.ds.is_implicit_VR = False
+
+      else:
+         self.ds = pydicom.dcmread(filename)
 
    def addUIDs(self, studyUID: str) -> None:
       self.ds.SpecificCharacterSet = "ISO_IR 192"
@@ -99,6 +99,9 @@ class DICOMInterface:
    def saveFile(self, filename: str) -> None:
       self.ds.save_as(filename, write_like_original=False)
 
+   def getXML(self) -> str:
+      self.xml_doc = sr.ContentSequence[0].TextValue
+      return self.xml_doc
 
 def makeDataset(parentUID: str, patientID: str, patientName: str, XMLString: str) -> DICOMInterface:
    basicSR = DICOMInterface()

@@ -20,7 +20,10 @@ import pydantic
 from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
 
+mapping = {
+	'patientName': '[record_id]',	
+}
 
 class REDCapInterface:
-   """Use PyCap to send dictionary of parameters"""
+   """Use PyCap to send dictionary of parameters. The mapping process is also performed here."""
    pass
