@@ -43,14 +43,14 @@ class ConquestInterface:
 		self.ae.add_requested_context(RTIonPlanStorage)
 		self.ae.add_requested_context(BasicTextSRStorage)
 
-	def sendDS(self, ds: Dataset) -> int:
+	def sendDS(self, ds: Dataset) -> list:
 		self.assoc = self.ae.associate(config['conquestIP'], config['conquestPort'])
 		if not self.assoc.is_established:
 			raise NoDICOMAssociation('Association rejected, aborted or never connected')
 
 		response = self.assoc.send_c_store(ds)
 		self.assoc.release()
-		return response
+		return response, config
 
 	def sendFilePath(self, filePath: str) -> list:
 		files = glob(filePath)

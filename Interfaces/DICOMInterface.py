@@ -62,6 +62,13 @@ class DICOMInterface:
       self.ds.PatientName = patientName
       self.ds.PatientID = patientID
 
+   def addDatetimes(self):
+      dt = datetime.datetime.now()
+      self.ds.ContentDate = dt.strftime('%Y%m%d')
+      self.ds.SeriesDate = dt.strftime('%Y%m%d')
+      self.ds.ContentTime = dt.strftime('%H%M%S.%f')
+      self.ds.SeriesTime = dt.strftime('%H%M%S.%f')
+
    def addContent(self, XMLString: str) -> None:
       title = pydicom.Dataset()
       title.CodeValue = self.documentTitleCode
@@ -97,5 +104,6 @@ def makeDataset(parentUID: str, patientID: str, patientName: str, XMLString: str
    basicSR = DICOMInterface()
    basicSR.addUIDs(parentUID)
    basicSR.addPatient(patientID=patientID, patientName=patientName)
+   basicSR.addDatetimes()
    basicSR.addContent(XMLString)
    return basicSR

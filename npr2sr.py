@@ -1,9 +1,11 @@
-from Interfaces.NPRInterface import NPRInterface
 from Interfaces.NPRIdentInterface import NPRIdentInterface
+from Interfaces.NPRInterface import NPRInterface
+
 from Interfaces.DICOMInterface import DICOMInterface, makeDataset
 from Interfaces.ConquestInterface import ConquestInterface
 
 from pydicom.uid import generate_uid
+import pathlib
 import argparse
 import os
 
@@ -62,7 +64,7 @@ else:
 	 output = args.outputFile
 
 if args.inputFile:
-	print(f"Opening file {args.inputfile}.")
+	print(f"Opening file {args.inputFile}.")
 	NPRObject = NPRInterface(args.inputFile)
 else:
 	print("Using dummy data generation.")
@@ -91,7 +93,8 @@ if args.outputConquest:
 	# the config.py settings are used for connection.
 
 	conquest = ConquestInterface()
-	conquest.sendDS(basicSR.ds)
+	response, config = conquest.sendDS(basicSR.ds)
+	print(f"File {output} sent to Conquest at {config['conquestIP']}:{config['conquestPort']}.")
 
 if not args.outputFile:
 	os.remove(output)

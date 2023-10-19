@@ -2,6 +2,7 @@ import datetime
 import pydantic
 from pydantic_xml import BaseXmlModel, RootXmlModel, attr, element, wrapped
 from typing import Optional, List
+import pathlib
 
 from Terminologies import NPR
 from Terminologies.ICD10 import ICD10
