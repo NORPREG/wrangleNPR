@@ -9,6 +9,8 @@ import pathlib
 import argparse
 import os
 
+import rich
+
 
 class NothingToOutputException(Exception):
 	 pass
@@ -35,6 +37,7 @@ parser.add_argument("-d", "--dummy", action="store_true",
 						  help="Make polyfactory dummy data instead of input file")
 parser.add_argument("-n", "--name", type=str, help="Patient name")
 parser.add_argument("-i", "--id", type=str, help="Patient ID")
+parser.add_argument("--print", action="store_true", help="Print/dump NPR file")
 
 # NPR ident file PID <-> fnr
 
@@ -54,7 +57,7 @@ if args.NPRVersion and args.NPRVersion != "57":
 	raise NPRVersionNotSupportedException(f"NPR version {ver} not supported.")
 
 if not args.outputFile:
-	if not args.outputConquest:
+	if not args.outputConquest and not args.print:
 		parser.print_help()
 		raise NothingToOutputException("Need an actual output destination (outputFile OR outputConquest).")
 
@@ -83,6 +86,9 @@ if len(patients) == 1:
 else:
 	patientName = "Many"
 	patientID = "123"
+
+if args.print:
+	rich.print(NPRObject.npr)
 
 # Returns DicomInterface object
 basicSR = makeDataset(parentUID, patientID, patientName, XMLString)
