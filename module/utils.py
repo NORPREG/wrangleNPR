@@ -1,5 +1,7 @@
 from functools import lru_cache
 from norpreg.Interfaces import REDCapInterface, KodelisteInterface
+import time
+
 
 kodeliste = KodelisteInterface.Kodeliste()
 
@@ -38,7 +40,6 @@ def find_skip_rows(filename):
         for idx, line in enumerate(in_file.readlines()):
             if "persno" in line.lower():
                 return idx
-
 
 mapper = {
     "HUS": {
