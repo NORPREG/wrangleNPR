@@ -9,8 +9,10 @@ Det er også mulig, spesielt i registersammenheng, å lage månedlige og ukentli
 
 Filens oppsett er at først ligger metadata (f.eks. rapporteringsperiode, uttaksdato), før selve innholdet med header og selve data.
 Metadata er markert med
-```++RTnpr Header Start++
-++RTnpr Header End++```
+```
+++RTnpr Header Start++
+++RTnpr Header End++
+```
 
 ## Variabler
 Følgende variabler er tilgjengelige (se NORPREG-repo for mer detaljer):
@@ -53,7 +55,8 @@ Følgende variabler er tilgjengelige (se NORPREG-repo for mer detaljer):
 Ulike stråleterapienheter benytter ulike skrivemetoder, så en mapping mellom dem er nødvendig. Spesielt fjernes kapitalisering under parsing. Registeret benytter Oslo universitetssykehus' skrivemåte.
 
 Ett eksempel er at rapporten fra Haukeland universitetssykehus mappes slik:
-```mapper = {
+```
+mapper = {
     "HUS": {
         "UtDato": "UtDato",
         "KNo": "Kno",
@@ -62,7 +65,8 @@ Ett eksempel er at rapporten fra Haukeland universitetssykehus mappes slik:
         "RefVolNavn": "RefVolumNavn",
         "BehSerieID": "BehSerieId"
     }
-}```
+}
+```
 Felles er rekkefølgen.
 
 De ulike enhetene jobber også med å få inn feltet ´PlanUid´ for en angitt behandlingsplan, dette legges til *på slutten* av CSV-raden.
