@@ -2,3 +2,4 @@
 *.xml
 *.json
 *.pyc
+__pycache__/*
