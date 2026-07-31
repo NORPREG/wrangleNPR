@@ -12,6 +12,7 @@ Output: tests/TestOutput/redcap_hus.json  /  redcap_ous.json
 Also tests that the only_proton and treatment_start_date filtering flags work.
 """
 
+
 import json
 import pandas as pd
 import pytest
