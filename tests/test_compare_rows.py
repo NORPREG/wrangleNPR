@@ -20,7 +20,7 @@ from unittest.mock import patch, MagicMock
 from norpreg.config import Config
 config = Config("OUS")
 
-from module import interface, utils, tuple_handler
+from module import interface, orchestrator, utils, tuple_handler
 
 TESTDATA = Path(__file__).parent / "TestData"
 OUTPUT_DIR = Path(__file__).parent / "TestOutput"
@@ -162,3 +162,36 @@ class TestCompareRows:
         written = _load_json(output_file)
         assert len(written) == len(delta)
         assert all("komm" in row for row in written)
+
+
+# ---------------------------------------------------------------------------
+# Regression test: compare_csv_redcap must forward its arguments to get_csv_data
+# (catches the bug where compare_csv_redcap called get_csv_data() with no args)
+# ---------------------------------------------------------------------------
+
+
+class TestCompareCsvRedcapSignature:
+
+    def test_compare_csv_redcap_calls_get_csv_data_with_required_args(self):
+        """orchestrator.compare_csv_redcap must pass only_proton, treatment_start_date
+        and paths through to interface.get_csv_data — a TypeError here means the
+        signature is broken."""
+        mock_config = MagicMock()
+        mock_config.HF = "HUS"
+
+        redcap_data = _load_json(CHANGED_INFO_FILE)
+
+        with (
+            patch("module.interface.config", mock_config),
+            patch("module.interface.find_files", return_value=[str(HUS_CSV)]),
+            patch("module.interface.sync_kodeliste", side_effect=_mock_sync_kodeliste),
+            patch("module.interface.get_redcap_rows", return_value=redcap_data),
+        ):
+            # Must not raise TypeError.
+            result = orchestrator.compare_csv_redcap(
+                only_proton=False,
+                treatment_start_date=None,
+                paths=[HUS_CSV],
+            )
+
+        assert isinstance(result, list)

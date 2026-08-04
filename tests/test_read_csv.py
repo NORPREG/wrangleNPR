@@ -11,11 +11,12 @@ import numpy as np
 import pandas as pd
 import pytest
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
 from norpreg.config import Config
 config = Config("OUS")
 
-from module import utils
+from module import interface, utils
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -23,6 +24,7 @@ from module import utils
 
 TEST_FILES = {
     "HUS": Path(__file__).parent / "TestData" / "test_npr_hus.csv",
+    "HUS_OLD": Path(__file__).parent / "TestData" / "test_npr_hus_eldre.csv",
     "OUS": Path(__file__).parent / "TestData" / "test_npr_ous.csv",
 }
 
@@ -182,3 +184,104 @@ class TestSplitHdiag:
         assert df.loc[0, "mdiag"] == "C500"
         assert df.loc[0, "hdiag"] == "C341"
         assert (df.loc[1:, "mdiag"] == "").all()
+
+
+# ---------------------------------------------------------------------------
+# UttaksDato metadata + duplicate priority
+# ---------------------------------------------------------------------------
+
+class TestUttaksdatoPriority:
+
+    @staticmethod
+    def _mock_sync_kodeliste(df: pd.DataFrame) -> pd.DataFrame:
+        df["record_id"] = df["PersNo"].apply(lambda p: f"T{str(p)[-6:]}" if pd.notna(p) else None)
+        df["fodselsdato"] = df["Fodselsar"].apply(
+            lambda y: f"{int(y)}-01-01" if pd.notna(y) and str(y).strip() else ""
+        )
+        return df[df["record_id"].notnull()].fillna("")
+
+    def test_get_uttaksdato_from_header(self):
+        uttaksdato = interface.get_uttaksdato_from_header(str(TEST_FILES["HUS"]))
+        assert pd.notna(uttaksdato)
+        assert uttaksdato.strftime("%Y-%m-%d") == "2026-02-02"
+
+    def test_get_csv_data_prefers_newer_hus_file_and_ignores_c701_from_old_extract(self):
+        """When same TUPLE_KEY exists in two files, newest UttaksDato wins.
+
+        test_npr_hus_eldre.csv has older UttaksDato and C701 in former metastasis slot,
+        while test_npr_hus.csv has newer UttaksDato and C700. The older rows should be ignored.
+        """
+        mock_config = MagicMock()
+        mock_config.HF = "HUS"
+
+        with (
+            patch("module.interface.config", mock_config),
+            patch(
+                "module.interface.find_files",
+                return_value=[str(TEST_FILES["HUS_OLD"]), str(TEST_FILES["HUS"])],
+            ),
+            patch("module.interface.sync_kodeliste", side_effect=self._mock_sync_kodeliste),
+        ):
+            df = interface.get_csv_data(
+                only_proton=False,
+                treatment_start_date=None,
+                paths=[TEST_FILES["HUS_OLD"], TEST_FILES["HUS"]],
+            )
+
+        # Result should be unique by TUPLE_KEY after prioritization/deduplication.
+        key_cols = ["kno", "refvolumid", "planuid"]
+        assert len(df) == len(df.drop_duplicates(subset=key_cols))
+        assert len(df) == 10
+        assert "mdiag" in df.columns
+        assert not (df["mdiag"] == "C701").any(), "Older extract rows should be ignored"
+        assert (df["mdiag"] == "C700").any(), "Expected newer HUS extract values to be kept"
+
+    def test_read_csv_prioritizes_latest_uttaksdato_for_duplicate_tuple_key(self, tmp_path):
+        csv_header = (
+            "PIDno;PersNo;Kjonn;Fodselsar;Komm;Bydel;Frasted;Debitor;Omsorg;TilSted;"
+            "Inndato;UtDato;KNo;Hdiag;Pkode;NyPas;BehSerieID;BehSerieNavn;BehSerieStart;"
+            "Intensjon;Maskin;RefVolID;RefVolNavn;RegionKode;RegionNavn;PlanTotDose;"
+            "DoseKorr;DKMerknad;PlanDose;GittDose;PlanUID\n"
+        )
+
+        row_common_prefix = (
+            "1234;12345678901;2;1956;{komm}; ;1;1;8;1;"
+            "20220301 12:00:00;20220301 12:00:10;0FI3J4JLFKJ42;C700,C605;WEOA00;1;123456;    ;"
+            "20220101 12:00:00;Kurativ;1;123;CTV_Breast;239;MAMMA/THORAXVEGG, V.S.   BLOTV;"
+            "30;0; ;6,0;6,0;1.3.6.1.4.1.2452.2.123456789123456789\n"
+        )
+
+        file_old = tmp_path / "old_extract.csv"
+        file_old.write_text(
+            "\n".join([
+                "++RTnpr Header Start++",
+                "FraDato=20260101",
+                "TilDato=20260131",
+                "UttaksDato=20260131",
+                "++RTnpr Header End++",
+                "",
+            ]) + csv_header + row_common_prefix.format(komm="1111"),
+            encoding="utf-8",
+        )
+
+        file_new = tmp_path / "new_extract.csv"
+        file_new.write_text(
+            "\n".join([
+                "++RTnpr Header Start++",
+                "FraDato=20260201",
+                "TilDato=20260202",
+                "UttaksDato=20260202",
+                "++RTnpr Header End++",
+                "",
+            ]) + csv_header + row_common_prefix.format(komm="2222"),
+            encoding="utf-8",
+        )
+
+        mock_config = MagicMock()
+        mock_config.HF = "HUS"
+
+        with patch("module.interface.config", mock_config):
+            df = interface.read_csv([tmp_path])
+
+        assert len(df) == 1, "Duplicate TUPLE_KEY rows should collapse to one row"
+        assert str(df.iloc[0]["Komm"]) == "2222", "Newest UttaksDato row should be kept"

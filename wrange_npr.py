@@ -25,14 +25,13 @@ PATHS = [ config.paths.npr_input / year for year in YEARS ]
 ONLY_PROTON = False
 TREATMENT_START_DATE = "2026-01-01"
 
-RUN_COMPARE_UPDATES = True
+RUN_COMPARE_UPDATES = False
 RUN_INSERT_NEW_ROWS = False
-RUN_REMOVE_REDCAP_DUPLICATES = False
-SEND_TO_REDCAP = True
-
+RUN_REMOVE_REDCAP_DUPLICATES = True
+SEND_TO_REDCAP = False
 
 if RUN_COMPARE_UPDATES:
-    compare_payload = orchestrator.compare_csv_redcap()
+    compare_payload = orchestrator.compare_csv_redcap(ONLY_PROTON, TREATMENT_START_DATE, PATHS)
 
     if SEND_TO_REDCAP and compare_payload:
         interface.send_payload(compare_payload)

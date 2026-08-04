@@ -29,7 +29,7 @@ def send_delete_payload(payload: dict) -> None:
             repeat_instance=instance,
         )
 
-def send_payload(payload: dict, n_split: int = 5) -> None:
+def send_payload(payload: dict, n_split: int = 20) -> None:
     for idx, payload_split in enumerate(utils.split_list(payload, n_split)):
         print(f"Sending list with {len(payload_split)} rows to REDCap... {idx+1}")
         REDCapInterface.send_json_to_redcap(payload_split)
@@ -75,7 +75,44 @@ def find_files(paths):
     for path in paths:
         for file in glob(str(path) + "/*.*"):
             files.append(file)
-    return files
+    return sorted(files)
+
+
+def get_uttaksdato_from_header(filename):
+    """Read UttaksDato=CCYYMMDD from the metadata header in an NPR file.
+
+    Returns pd.Timestamp or pd.NaT if missing/invalid.
+    """
+    with open(filename, "r", encoding="utf-8") as in_file:
+        for line in in_file:
+            if "persno" in line.lower():
+                break
+            if line.startswith("UttaksDato="):
+                value = line.strip().split("=", 1)[1]
+                return pd.to_datetime(value, format="%Y%m%d", errors="coerce")
+    return pd.NaT
+
+
+def prioritize_latest_uttaksdato(df):
+    """For duplicate input rows (same TUPLE_KEY), keep latest UttaksDato.
+
+    Deduplicates by the canonical key columns after CSV mapping.
+    """
+    key_columns = ["Kno", "RefVolumId", "PlanUID"]
+    if any(col not in df.columns for col in key_columns):
+        return df
+
+    before = len(df)
+    df = df.sort_values(
+        by=["_uttaksdato", "_source_order"],
+        ascending=[False, False],
+        na_position="last",
+    )
+    df = df.drop_duplicates(subset=key_columns, keep="first")
+    after = len(df)
+    if after < before:
+        print(f"Deduplicated input rows by latest UttaksDato: removed {before - after} duplicate row(s).")
+    return df
 
 def read_csv(paths):
     """Read the NPR CSV files. Do some light parsing."""
@@ -88,11 +125,14 @@ def read_csv(paths):
     # Skip header row
     skip_rows = {file: utils.find_skip_rows(file) for file in files}
 
-    # Read all the CSV files contained in target folder
-    df_perfile = [
-        pd.read_csv(file, sep=";", decimal=",", skiprows=skip_rows[file], dtype=dtypes)
-        for file in files
-    ]
+    # Read all the CSV files contained in target folder, and keep file metadata
+    # so we can prioritize newest UttaksDato when duplicate TUPLE_KEY rows exist.
+    df_perfile = []
+    for source_order, file in enumerate(files):
+        df_file = pd.read_csv(file, sep=";", decimal=",", skiprows=skip_rows[file], dtype=dtypes)
+        df_file["_uttaksdato"] = get_uttaksdato_from_header(file)
+        df_file["_source_order"] = source_order
+        df_perfile.append(df_file)
 
     df_combined = pd.concat(df_perfile)
 
@@ -108,6 +148,9 @@ def read_csv(paths):
     # Not all NPR files have this column -- yet
     if not "PlanUID" in df_combined.columns:
         df_combined["PlanUID"] = ""
+
+    df_combined = prioritize_latest_uttaksdato(df_combined)
+    df_combined.drop(columns=["_source_order"], inplace=True)
 
     return df_combined
 
@@ -129,6 +172,10 @@ def get_csv_data(only_proton, treatment_start_date, paths):
 
     if config.HF in HF_WITH_SPLIT_HDIAG:
         utils.split_hdiag(df_npr_csv)
+
+    # Internal metadata used only for input prioritization.
+    if "_uttaksdato" in df_npr_csv.columns:
+        df_npr_csv.drop(columns=["_uttaksdato"], inplace=True)
     
     return df_npr_csv
 

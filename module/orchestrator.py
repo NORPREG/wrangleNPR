@@ -77,7 +77,7 @@ def find_duplicated_rows() -> list[dict]:
     to_delete.sort(key=lambda r: r["redcap_repeat_instance"], reverse=True)
     return to_delete
 
-def compare_csv_redcap() -> list[dict]:
+def compare_csv_redcap(only_proton, treatment_start_date, paths) -> list[dict]:
     """Strategy for finding duplicates:
         - Compare all three TUPLE_KEYs, even if no planuid is present
             - In earlier version I only looked at data with k[2] (planuid) present, miss a few that way
@@ -91,10 +91,11 @@ def compare_csv_redcap() -> list[dict]:
     ambiguous_tuple = 0
     to_update = []
     updated_patients = set()
+    change_counter: Counter = Counter()
 
     redcap_rows = interface.get_redcap_rows("npr")
 
-    df_npr = interface.get_csv_data()
+    df_npr = interface.get_csv_data(only_proton, treatment_start_date, paths)
     npr_records = df_npr.to_dict(orient="records")
 
     duplicate_npr_keys = tuple_handler.find_duplicate_tuple_keys(npr_records)
@@ -169,7 +170,7 @@ def compare_csv_redcap() -> list[dict]:
     return to_update
 
 def find_new_rows(only_proton, treatment_start_date, paths):
-    df_npr = interface.get_csv_data(only_proton, treatment_start_date, paths=PATHS)
+    df_npr = interface.get_csv_data(only_proton, treatment_start_date, paths=paths)
     interface.remove_rows_in_redcap(df_npr)
     to_redcap = df_npr.to_dict(orient="records")
 
